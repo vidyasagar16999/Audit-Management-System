@@ -10,11 +10,11 @@
             <option value="SOX">SOX</option>
         </select>
         <br><br>
-        <div class="error1" *ngIf="opt.touched && !opt.valid"><b>Audit type is required</b>
+        <div class="error1" *ngIf="(opt.touched || !opt.touched) && !opt.valid"><b>Audit type is required</b>
             
         </div>
         <br>
-        <input class="btn1 btn-info bigbtn" type="submit" value="See Questions" (click)="getQuestions()">
+        <input class="btn1 btn-info bigbtn" type="submit" value="See Questions" *ngIf="opt.touched && opt.valid" (click)="getQuestions()">
     </div>
     
     </form>
