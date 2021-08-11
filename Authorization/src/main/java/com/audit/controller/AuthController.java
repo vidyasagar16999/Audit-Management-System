@@ -43,12 +43,8 @@ public class AuthController {
 	public ResponseEntity<String> healthCheck(){	// for Health check [PERMITTED FOR ALL]
 		return new ResponseEntity<String>("Audit-Authorization MS Running Fine!!", HttpStatus.OK);
 	}
-	@GetMapping("/hello")
-	public String hellow() {
-		
-		return "hello i am authenticated";
-	}
-	
+
+
 	// authentication - for the very first login
 	@PostMapping("/authenticate")
 	public ResponseEntity<String> generateJwt(@Valid @RequestBody AuthenticationRequest request){

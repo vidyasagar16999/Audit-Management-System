@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class AuthorizationApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void main() {
+		AuthorizationApplication.main(new String[] {});
 	}
 
 }
