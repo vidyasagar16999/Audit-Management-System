@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JwtRequestFilter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Authorization</a> &gt; <a href="index.source.html" class="el_package">com.audit.filter</a> &gt; <span class="el_source">JwtRequestFilter.java</span></div><h1>JwtRequestFilter.java</h1><pre class="source lang-java linenums">package com.audit.filter;
+
+import java.io.IOException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.audit.exception.ProjectManagerNotFoundException;
+import com.audit.model.ProjectManagerDetails;
+import com.audit.service.JwtService;
+import com.audit.service.ProjectManagerDetailsService;
+
+@Component
+<span class="fc" id="L25">public class JwtRequestFilter extends OncePerRequestFilter{</span>
+
+	@Autowired
+	private ProjectManagerDetailsService projectManagerDetailsService;
+
+	@Autowired
+	private JwtService jwtService;
+	
+<span class="fc" id="L33">	Logger logger = LoggerFactory.getLogger(&quot;Jwt-Request-Filter&quot;);</span>
+
+	// an added security layer to authorize all the requests if they have valid jwt or not
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException, ProjectManagerNotFoundException {
+		
+<span class="nc" id="L40">		final String jwtRequestHeader = request.getHeader(&quot;Authorization&quot;);</span>
+		
+<span class="nc" id="L42">		logger.info(&quot;Inside JwtRequestFilter : &quot; + request.getRequestURI());</span>
+		
+<span class="nc" id="L44">		String jwt = null, username = null;</span>
+<span class="nc bnc" id="L45" title="All 4 branches missed.">		if (jwtRequestHeader != null &amp;&amp; jwtRequestHeader.startsWith(&quot;Bearer &quot;)) {</span>
+<span class="nc" id="L46">			jwt = jwtRequestHeader.substring(7);</span>
+			try {
+<span class="nc" id="L48">				username = jwtService.extractUsername(jwt);</span>
+<span class="nc" id="L49">				logger.info(&quot;Successfully obtained username : (&quot; + username + &quot;) from JWT&quot;);</span>
+<span class="nc" id="L50">			} catch (Exception e) {</span>
+<span class="nc" id="L51">				logger.error(e.getMessage());</span>
+<span class="nc" id="L52">			}</span>
+		} else {
+<span class="nc" id="L54">			logger.error(&quot;Problem with JWT token obtained from Request-Header. JWT :: &quot;+jwt);</span>
+		}
+		
+<span class="nc bnc" id="L57" title="All 4 branches missed.">		if (username != null &amp;&amp; SecurityContextHolder.getContext().getAuthentication() == null) {</span>
+
+<span class="nc" id="L59">			ProjectManagerDetails projectManagerDetails = projectManagerDetailsService.loadUserByUsername(username);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">			if (jwtService.validateToken(jwt, projectManagerDetails)) {</span>
+				UsernamePasswordAuthenticationToken 
+<span class="nc" id="L62">					usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(</span>
+															projectManagerDetails, null, 
+<span class="nc" id="L64">															projectManagerDetails.getAuthorities());</span>
+<span class="nc" id="L65">				usernamePasswordAuthenticationToken</span>
+<span class="nc" id="L66">						.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));</span>
+<span class="nc" id="L67">				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);</span>
+<span class="nc" id="L68">				logger.info(&quot;Successfully obtained and validated JWT :: &quot;+jwt);</span>
+<span class="nc" id="L69">			}</span>
+			else {
+<span class="nc" id="L71">				logger.error(&quot;Validation failed for JWT :: &quot;+jwt);</span>
+			}
+<span class="nc" id="L73">		}</span>
+		else {
+<span class="nc" id="L75">			logger.error(&quot;Problem with JWT token obtained from Request-Header. JWT :: &quot;+jwt);</span>
+		}
+<span class="nc" id="L77">		logger.info(&quot;-------- Exiting JwtRequestFilter&quot;);</span>
+<span class="nc" id="L78">		filterChain.doFilter(request, response);</span>
+<span class="nc" id="L79">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
