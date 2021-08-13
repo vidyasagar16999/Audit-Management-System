@@ -18,8 +18,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.audit.exception.ProjectManagerNotFoundException;
 import com.audit.model.ProjectManagerDetails;
-import com.audit.service.JwtService;
 import com.audit.service.ProjectManagerDetailsService;
+import com.audit.util.JwtService;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter{

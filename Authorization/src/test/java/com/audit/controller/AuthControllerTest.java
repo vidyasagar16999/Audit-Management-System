@@ -19,8 +19,8 @@ import com.audit.model.AuthenticationRequest;
 import com.audit.model.AuthenticationResponse;
 import com.audit.model.ProjectManager;
 import com.audit.model.ProjectManagerDetails;
-import com.audit.service.JwtService;
 import com.audit.service.ProjectManagerDetailsService;
+import com.audit.util.JwtService;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthControllerTest {

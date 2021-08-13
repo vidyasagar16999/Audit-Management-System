@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.audit.model.AuthenticationRequest;
 import com.audit.model.AuthenticationResponse;
 import com.audit.model.ProjectManagerDetails;
-import com.audit.service.JwtService;
 import com.audit.service.ProjectManagerDetailsService;
+import com.audit.util.JwtService;
 
 @RestController
 @RequestMapping("/auth")	//Context Root
