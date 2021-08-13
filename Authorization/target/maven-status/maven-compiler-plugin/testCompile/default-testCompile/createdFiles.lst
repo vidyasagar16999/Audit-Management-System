@@ -1,6 +1,0 @@
-com\audit\AuthorizationApplicationTests.class
-com\audit\controller\AuthControllerTest.class
-com\audit\service\ProjectManagerDetailsServiceTest.class
-com\audit\model\AuthenticationResponseTest.class
-com\audit\service\ProjectManagerServiceTest.class
-com\audit\model\AuthenticationRequestTest.class
