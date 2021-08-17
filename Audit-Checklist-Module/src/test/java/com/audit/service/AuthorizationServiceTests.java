@@ -109,8 +109,8 @@ class AuthorizationServiceTests {
 		q.setResponse("yes");
 		assertThat(assertThat(q).isNotNull());
 	}
-	@Test
+	/*@Test
 	void testQuestion() {
 		EqualsVerifier.simple().forClass(Question.class).verify();
-	}
+	}*/
 }
