@@ -10,7 +10,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
   providedIn: 'root'
 })
 export class AuthorizationMSClientService {
-
+public  _url="http://localhost:8100/";
   constructor(private authClient : HttpClient) { }
 
   authenticate(authRequest : AuthenticationRequest){
